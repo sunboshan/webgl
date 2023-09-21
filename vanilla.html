@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>WebGL Point Example</title>
+</head>
+<body>
+    <canvas id="webgl-canvas" width="400" height="400"></canvas>
+
+    <script id="vertex-shader" type="x-shader/x-vertex">
+        attribute vec4 coordinates;
+        void main(void) {
+            gl_Position = coordinates;
+            gl_PointSize = 10.0; // Adjust the size of the point
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        void main(void) {
+            gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Set point color (red)
+        }
+    </script>
+
+    <script type="text/javascript">
+        // Get the WebGL rendering context
+        var canvas = document.getElementById("webgl-canvas");
+        var gl = canvas.getContext("webgl");
+
+        // Define the vertices for the point (in normalized device coordinates)
+        var vertices = new Float32Array([0.0, 0.0]);
+
+        // Create and compile the vertex shader
+        var vertCode = document.getElementById("vertex-shader").textContent;
+        var vertShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertShader, vertCode);
+        gl.compileShader(vertShader);
+
+        // Create and compile the fragment shader
+        var fragCode = document.getElementById("fragment-shader").textContent;
+        var fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragShader, fragCode);
+        gl.compileShader(fragShader);
+
+        // Create a shader program
+        var shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertShader);
+        gl.attachShader(shaderProgram, fragShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+
+        // Create a buffer object and load the vertices into it
+        var vertexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+        // Get the attribute and uniform locations
+        var coord = gl.getAttribLocation(shaderProgram, "coordinates");
+        gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(coord);
+
+        // Clear the canvas and draw the point
+        gl.clearColor(0.0, 0.0, 0.0, 1.0); // Set the background color (black)
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.POINTS, 0, 1); // Draw the point
+
+    </script>
+</body>
+</html>
