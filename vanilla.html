@@ -8,6 +8,8 @@
     <canvas id="webgl-canvas" width="400" height="400"></canvas>
 
     <script id="vertex-shader" type="x-shader/x-vertex">
+        // Vertex shader放点的位置信息
+
         void main(void) {
             gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
             gl_PointSize = 10.0; // Adjust the size of the point
@@ -15,6 +17,8 @@
     </script>
 
     <script id="fragment-shader" type="x-shader/x-fragment">
+        // Fragment shader放点的颜色信息
+
         void main(void) {
             gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0); // Set point color (red)
         }
