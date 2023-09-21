@@ -8,9 +8,8 @@
     <canvas id="webgl-canvas" width="400" height="400"></canvas>
 
     <script id="vertex-shader" type="x-shader/x-vertex">
-        attribute vec4 coordinates;
         void main(void) {
-            gl_Position = coordinates;
+            gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
             gl_PointSize = 10.0; // Adjust the size of the point
         }
     </script>
@@ -25,9 +24,6 @@
         // Get the WebGL rendering context
         var canvas = document.getElementById("webgl-canvas");
         var gl = canvas.getContext("webgl");
-
-        // Define the vertices for the point (in normalized device coordinates)
-        var vertices = new Float32Array([0.0, 0.0]);
 
         // Create and compile the vertex shader
         var vertCode = document.getElementById("vertex-shader").textContent;
@@ -47,16 +43,6 @@
         gl.attachShader(shaderProgram, fragShader);
         gl.linkProgram(shaderProgram);
         gl.useProgram(shaderProgram);
-
-        // Create a buffer object and load the vertices into it
-        var vertexBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-        // Get the attribute and uniform locations
-        var coord = gl.getAttribLocation(shaderProgram, "coordinates");
-        gl.vertexAttribPointer(coord, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(coord);
 
         // Clear the canvas and draw the point
         gl.clearColor(0.0, 0.0, 0.0, 1.0); // Set the background color (black)
